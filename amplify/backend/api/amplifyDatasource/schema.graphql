@@ -1,0 +1,7 @@
+type Personality @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String!
+  Nickname: String
+  Bio: String
+  ImageUrl: String
+}
