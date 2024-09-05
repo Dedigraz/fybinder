@@ -1,0 +1,14 @@
+{
+  "resourceName": "s3fybinderstorage4014309c",
+  "bucketName": "fybinder-storage-4014309c",
+  "policyUUID": "28a24f88",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

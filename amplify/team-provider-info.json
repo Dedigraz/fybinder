@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fybinder-staging-a51f5-authRole",
+      "UnauthRoleArn": "arn:aws:iam::010526264276:role/amplify-fybinder-staging-a51f5-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::010526264276:role/amplify-fybinder-staging-a51f5-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-fybinder-staging-a51f5-deployment",
+      "UnauthRoleName": "amplify-fybinder-staging-a51f5-unauthRole",
+      "StackName": "amplify-fybinder-staging-a51f5",
+      "StackId": "arn:aws:cloudformation:eu-west-2:010526264276:stack/amplify-fybinder-staging-a51f5/bfca4a20-6a78-11ef-8275-0a266dfe55c5",
+      "AmplifyAppId": "d4gi3b2iqodbc"
+    },
+    "categories": {
+      "auth": {
+        "Fybinder": {}
+      }
+    }
+  }
+}
