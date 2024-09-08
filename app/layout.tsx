@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Schibsted_Grotesk } from "next/font/google";
-import "./globals.css";
-import { Amplify } from "aws-amplify";
-import amplifyconfig from '@/amplifyconfiguration.json';
+import { Inter } from "next/font/google";
+import "./app.css";
 
-Amplify.configure(amplifyconfig);
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -14,9 +11,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
