@@ -439,7 +439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-amplify/core@npm:6.4.0":
+"@aws-amplify/core@npm:6.4.0, @aws-amplify/core@npm:^6.4.0":
   version: 6.4.0
   resolution: "@aws-amplify/core@npm:6.4.0"
   dependencies:
@@ -10676,6 +10676,7 @@ __metadata:
   dependencies:
     "@aws-amplify/backend": "npm:^1.0.4"
     "@aws-amplify/backend-cli": "npm:^1.1.1"
+    "@aws-amplify/core": "npm:^6.4.0"
     "@aws-amplify/ui-react": "npm:^6.1.13"
     "@hookform/resolvers": "npm:^3.9.0"
     "@radix-ui/react-accordion": "npm:^1.2.0"
