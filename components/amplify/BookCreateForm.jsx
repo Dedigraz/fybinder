@@ -7,10 +7,10 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { Personality } from "../models";
+import { Book } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify/datastore";
-export default function PersonalityCreateForm(props) {
+export default function BookCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -22,28 +22,22 @@ export default function PersonalityCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    Name: "",
-    Nickname: "",
-    Bio: "",
-    ImageUrl: "",
+    name: "",
+    numOfParticipants: "",
   };
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Nickname, setNickname] = React.useState(initialValues.Nickname);
-  const [Bio, setBio] = React.useState(initialValues.Bio);
-  const [ImageUrl, setImageUrl] = React.useState(initialValues.ImageUrl);
+  const [name, setName] = React.useState(initialValues.name);
+  const [numOfParticipants, setNumOfParticipants] = React.useState(
+    initialValues.numOfParticipants
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(initialValues.Name);
-    setNickname(initialValues.Nickname);
-    setBio(initialValues.Bio);
-    setImageUrl(initialValues.ImageUrl);
+    setName(initialValues.name);
+    setNumOfParticipants(initialValues.numOfParticipants);
     setErrors({});
   };
   const validations = {
-    Name: [{ type: "Required" }],
-    Nickname: [],
-    Bio: [],
-    ImageUrl: [],
+    name: [],
+    numOfParticipants: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -71,10 +65,8 @@ export default function PersonalityCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Name,
-          Nickname,
-          Bio,
-          ImageUrl,
+          name,
+          numOfParticipants,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -104,7 +96,7 @@ export default function PersonalityCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Personality(modelFields));
+          await DataStore.save(new Book(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -117,116 +109,64 @@ export default function PersonalityCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "PersonalityCreateForm")}
+      {...getOverrideProps(overrides, "BookCreateForm")}
       {...rest}
     >
       <TextField
         label="Name"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
-        value={Name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name: value,
-              Nickname,
-              Bio,
-              ImageUrl,
+              name: value,
+              numOfParticipants,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
           setName(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Nickname"
+        label="Num of participants"
         isRequired={false}
         isReadOnly={false}
-        value={Nickname}
+        type="number"
+        step="any"
+        value={numOfParticipants}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
-              Name,
-              Nickname: value,
-              Bio,
-              ImageUrl,
+              name,
+              numOfParticipants: value,
             };
             const result = onChange(modelFields);
-            value = result?.Nickname ?? value;
+            value = result?.numOfParticipants ?? value;
           }
-          if (errors.Nickname?.hasError) {
-            runValidationTasks("Nickname", value);
+          if (errors.numOfParticipants?.hasError) {
+            runValidationTasks("numOfParticipants", value);
           }
-          setNickname(value);
+          setNumOfParticipants(value);
         }}
-        onBlur={() => runValidationTasks("Nickname", Nickname)}
-        errorMessage={errors.Nickname?.errorMessage}
-        hasError={errors.Nickname?.hasError}
-        {...getOverrideProps(overrides, "Nickname")}
-      ></TextField>
-      <TextField
-        label="Bio"
-        isRequired={false}
-        isReadOnly={false}
-        value={Bio}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Nickname,
-              Bio: value,
-              ImageUrl,
-            };
-            const result = onChange(modelFields);
-            value = result?.Bio ?? value;
-          }
-          if (errors.Bio?.hasError) {
-            runValidationTasks("Bio", value);
-          }
-          setBio(value);
-        }}
-        onBlur={() => runValidationTasks("Bio", Bio)}
-        errorMessage={errors.Bio?.errorMessage}
-        hasError={errors.Bio?.hasError}
-        {...getOverrideProps(overrides, "Bio")}
-      ></TextField>
-      <TextField
-        label="Image url"
-        isRequired={false}
-        isReadOnly={false}
-        value={ImageUrl}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Nickname,
-              Bio,
-              ImageUrl: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.ImageUrl ?? value;
-          }
-          if (errors.ImageUrl?.hasError) {
-            runValidationTasks("ImageUrl", value);
-          }
-          setImageUrl(value);
-        }}
-        onBlur={() => runValidationTasks("ImageUrl", ImageUrl)}
-        errorMessage={errors.ImageUrl?.errorMessage}
-        hasError={errors.ImageUrl?.hasError}
-        {...getOverrideProps(overrides, "ImageUrl")}
+        onBlur={() =>
+          runValidationTasks("numOfParticipants", numOfParticipants)
+        }
+        errorMessage={errors.numOfParticipants?.errorMessage}
+        hasError={errors.numOfParticipants?.hasError}
+        {...getOverrideProps(overrides, "numOfParticipants")}
       ></TextField>
       <Flex
         justifyContent="space-between"

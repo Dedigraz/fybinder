@@ -1,7 +1,32 @@
+type LoggingAttr {
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type Post @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  bookID: ID! @index(name: "byBook")
+  imageUris: AWSJSON
+  likes: Int
+  logginAttr: LoggingAttr
+  CorePersonality: Personality @hasOne
+}
+
+type Book @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  numOfParticipants: Int
+  Personalities: [Personality] @manyToMany(relationName: "BookPersonality")
+  Posts: [Post] @hasMany(indexName: "byBook", fields: ["id"])
+  logginAttributes: LoggingAttr
+}
+
 type Personality @model @auth(rules: [{allow: public}]) {
   id: ID!
-  Name: String!
-  Nickname: String
-  Bio: String
-  ImageUrl: String
+  name: String!
+  nickname: String
+  bio: String
+  imageUrl: String
+  books: [Book] @manyToMany(relationName: "BookPersonality")
 }
+ 

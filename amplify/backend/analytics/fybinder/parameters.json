@@ -1,0 +1,21 @@
+{
+    "appName": "fybinder",
+    "roleName": "pinpointLambdaRole513035ee",
+    "cloudformationPolicyName": "cloudformationPolicy513035ee",
+    "cloudWatchPolicyName": "cloudWatchPolicy513035ee",
+    "pinpointPolicyName": "pinpointPolicy513035ee",
+    "authPolicyName": "pinpoint_amplify_513035ee",
+    "unauthPolicyName": "pinpoint_amplify_513035ee",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

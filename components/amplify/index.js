@@ -4,6 +4,8 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
+export { default as BookCreateForm } from "./BookCreateForm";
+export { default as BookUpdateForm } from "./BookUpdateForm";
 export { default as PersonalityCreateForm } from "./PersonalityCreateForm";
 export { default as PersonalityUpdateForm } from "./PersonalityUpdateForm";
 export { default as studioTheme } from "./studioTheme";

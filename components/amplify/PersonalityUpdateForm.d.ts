@@ -23,24 +23,24 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type PersonalityUpdateFormInputValues = {
-    Name?: string;
-    Nickname?: string;
-    Bio?: string;
-    ImageUrl?: string;
+    name?: string;
+    nickname?: string;
+    bio?: string;
+    imageUrl?: string;
 };
 export declare type PersonalityUpdateFormValidationValues = {
-    Name?: ValidationFunction<string>;
-    Nickname?: ValidationFunction<string>;
-    Bio?: ValidationFunction<string>;
-    ImageUrl?: ValidationFunction<string>;
+    name?: ValidationFunction<string>;
+    nickname?: ValidationFunction<string>;
+    bio?: ValidationFunction<string>;
+    imageUrl?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PersonalityUpdateFormOverridesProps = {
     PersonalityUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    Name?: PrimitiveOverrideProps<TextFieldProps>;
-    Nickname?: PrimitiveOverrideProps<TextFieldProps>;
-    Bio?: PrimitiveOverrideProps<TextFieldProps>;
-    ImageUrl?: PrimitiveOverrideProps<TextFieldProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    nickname?: PrimitiveOverrideProps<TextFieldProps>;
+    bio?: PrimitiveOverrideProps<TextFieldProps>;
+    imageUrl?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type PersonalityUpdateFormProps = React.PropsWithChildren<{
     overrides?: PersonalityUpdateFormOverridesProps | undefined | null;

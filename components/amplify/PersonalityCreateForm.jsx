@@ -10,10 +10,9 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { Personality } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify/datastore";
-export default function PersonalityUpdateForm(props) {
+export default function PersonalityCreateForm(props) {
   const {
-    id: idProp,
-    personality: personalityModelProp,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -23,43 +22,28 @@ export default function PersonalityUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    Name: "",
-    Nickname: "",
-    Bio: "",
-    ImageUrl: "",
+    name: "",
+    nickname: "",
+    bio: "",
+    imageUrl: "",
   };
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Nickname, setNickname] = React.useState(initialValues.Nickname);
-  const [Bio, setBio] = React.useState(initialValues.Bio);
-  const [ImageUrl, setImageUrl] = React.useState(initialValues.ImageUrl);
+  const [name, setName] = React.useState(initialValues.name);
+  const [nickname, setNickname] = React.useState(initialValues.nickname);
+  const [bio, setBio] = React.useState(initialValues.bio);
+  const [imageUrl, setImageUrl] = React.useState(initialValues.imageUrl);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = personalityRecord
-      ? { ...initialValues, ...personalityRecord }
-      : initialValues;
-    setName(cleanValues.Name);
-    setNickname(cleanValues.Nickname);
-    setBio(cleanValues.Bio);
-    setImageUrl(cleanValues.ImageUrl);
+    setName(initialValues.name);
+    setNickname(initialValues.nickname);
+    setBio(initialValues.bio);
+    setImageUrl(initialValues.imageUrl);
     setErrors({});
   };
-  const [personalityRecord, setPersonalityRecord] =
-    React.useState(personalityModelProp);
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = idProp
-        ? await DataStore.query(Personality, idProp)
-        : personalityModelProp;
-      setPersonalityRecord(record);
-    };
-    queryData();
-  }, [idProp, personalityModelProp]);
-  React.useEffect(resetStateValues, [personalityRecord]);
   const validations = {
-    Name: [{ type: "Required" }],
-    Nickname: [],
-    Bio: [],
-    ImageUrl: [],
+    name: [{ type: "Required" }],
+    nickname: [],
+    bio: [],
+    imageUrl: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -87,10 +71,10 @@ export default function PersonalityUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Name,
-          Nickname,
-          Bio,
-          ImageUrl,
+          name,
+          nickname,
+          bio,
+          imageUrl,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -120,13 +104,12 @@ export default function PersonalityUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
-            Personality.copyOf(personalityRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await DataStore.save(new Personality(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -134,130 +117,129 @@ export default function PersonalityUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "PersonalityUpdateForm")}
+      {...getOverrideProps(overrides, "PersonalityCreateForm")}
       {...rest}
     >
       <TextField
         label="Name"
         isRequired={true}
         isReadOnly={false}
-        value={Name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name: value,
-              Nickname,
-              Bio,
-              ImageUrl,
+              name: value,
+              nickname,
+              bio,
+              imageUrl,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
           setName(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
         label="Nickname"
         isRequired={false}
         isReadOnly={false}
-        value={Nickname}
+        value={nickname}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name,
-              Nickname: value,
-              Bio,
-              ImageUrl,
+              name,
+              nickname: value,
+              bio,
+              imageUrl,
             };
             const result = onChange(modelFields);
-            value = result?.Nickname ?? value;
+            value = result?.nickname ?? value;
           }
-          if (errors.Nickname?.hasError) {
-            runValidationTasks("Nickname", value);
+          if (errors.nickname?.hasError) {
+            runValidationTasks("nickname", value);
           }
           setNickname(value);
         }}
-        onBlur={() => runValidationTasks("Nickname", Nickname)}
-        errorMessage={errors.Nickname?.errorMessage}
-        hasError={errors.Nickname?.hasError}
-        {...getOverrideProps(overrides, "Nickname")}
+        onBlur={() => runValidationTasks("nickname", nickname)}
+        errorMessage={errors.nickname?.errorMessage}
+        hasError={errors.nickname?.hasError}
+        {...getOverrideProps(overrides, "nickname")}
       ></TextField>
       <TextField
         label="Bio"
         isRequired={false}
         isReadOnly={false}
-        value={Bio}
+        value={bio}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name,
-              Nickname,
-              Bio: value,
-              ImageUrl,
+              name,
+              nickname,
+              bio: value,
+              imageUrl,
             };
             const result = onChange(modelFields);
-            value = result?.Bio ?? value;
+            value = result?.bio ?? value;
           }
-          if (errors.Bio?.hasError) {
-            runValidationTasks("Bio", value);
+          if (errors.bio?.hasError) {
+            runValidationTasks("bio", value);
           }
           setBio(value);
         }}
-        onBlur={() => runValidationTasks("Bio", Bio)}
-        errorMessage={errors.Bio?.errorMessage}
-        hasError={errors.Bio?.hasError}
-        {...getOverrideProps(overrides, "Bio")}
+        onBlur={() => runValidationTasks("bio", bio)}
+        errorMessage={errors.bio?.errorMessage}
+        hasError={errors.bio?.hasError}
+        {...getOverrideProps(overrides, "bio")}
       ></TextField>
       <TextField
         label="Image url"
         isRequired={false}
         isReadOnly={false}
-        value={ImageUrl}
+        value={imageUrl}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name,
-              Nickname,
-              Bio,
-              ImageUrl: value,
+              name,
+              nickname,
+              bio,
+              imageUrl: value,
             };
             const result = onChange(modelFields);
-            value = result?.ImageUrl ?? value;
+            value = result?.imageUrl ?? value;
           }
-          if (errors.ImageUrl?.hasError) {
-            runValidationTasks("ImageUrl", value);
+          if (errors.imageUrl?.hasError) {
+            runValidationTasks("imageUrl", value);
           }
           setImageUrl(value);
         }}
-        onBlur={() => runValidationTasks("ImageUrl", ImageUrl)}
-        errorMessage={errors.ImageUrl?.errorMessage}
-        hasError={errors.ImageUrl?.hasError}
-        {...getOverrideProps(overrides, "ImageUrl")}
+        onBlur={() => runValidationTasks("imageUrl", imageUrl)}
+        errorMessage={errors.imageUrl?.errorMessage}
+        hasError={errors.imageUrl?.hasError}
+        {...getOverrideProps(overrides, "imageUrl")}
       ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Reset"
+          children="Clear"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || personalityModelProp)}
-          {...getOverrideProps(overrides, "ResetButton")}
+          {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -267,10 +249,7 @@ export default function PersonalityUpdateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={
-              !(idProp || personalityModelProp) ||
-              Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>
